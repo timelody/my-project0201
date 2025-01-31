@@ -97,10 +97,22 @@
         text.style.opacity = text.style.opacity === "0.5" ? "1" : "0.5";
       }
 
+      // 新增回车键处理函数
+      function handleEnter(event) {
+        if (event.key === "Enter" || event.keyCode === 13) {
+          event.preventDefault(); // 阻止默认表单提交行为
+          addTask();
+        }
+      }
+
       // 修改后的addTask函数
       function addTask() {
         const input = document.getElementById("newTaskInput");
         if (input.value.trim() === "") return;
+        if (input.value.trim() === "") {
+          input.focus(); // 空输入时保持聚焦
+          return;
+        }
 
         // 创建任务容器
         const taskItem = document.createElement("div");
@@ -129,6 +141,7 @@
         tasksContainer.insertBefore(taskItem, tasksContainer.firstChild);
 
         input.value = "";
+        input.focus(); // 添加成功后重新聚焦输入框
       }
 
       // 初始化现有任务（修改原有静态任务）
@@ -142,9 +155,17 @@
       });
     </script>
     <div style="margin-top: 20px">
-      <input type="text" id="newTaskInput" placeholder="输入新任务" />
+      <input
+        type="text"
+        id="newTaskInput"
+        placeholder="输入新任务"
+        onkeypress="handleEnter(event)"
+        <!--
+        新增键盘事件监听
+        --
+      />
+
       <button onclick="addTask()">添加任务</button>
     </div>
-
   </body>
 </html>
