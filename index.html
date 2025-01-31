@@ -24,6 +24,28 @@
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
+
+      .task-item {
+        display: flex; /* 启用Flex布局 */
+        justify-content: space-between; /* 内容两端对齐 */
+        align-items: center; /* 垂直居中 */
+      }
+
+      .delete-btn {
+        background-color: #ff4444;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        border-radius: 3px;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: all 0.3s;
+      }
+
+      .delete-btn:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
       /* 新增的footer样式 */
       footer {
         background-color: #f0f0f0;
@@ -67,35 +89,62 @@
       console.log(taskItems); // 检查是否获取到3个任务项
 
       function toggleDone(element) {
-        // 切换完成状态样式
-        element.style.textDecoration =
-          element.style.textDecoration === "line-through"
+        const text = element.querySelector(".task-text"); // 获取文本元素
+        text.style.textDecoration =
+          text.style.textDecoration === "line-through"
             ? "none"
             : "line-through";
-        element.style.opacity = element.style.opacity === "0.5" ? "1" : "0.5";
+        text.style.opacity = text.style.opacity === "0.5" ? "1" : "0.5";
       }
 
+      // 修改后的addTask函数
       function addTask() {
         const input = document.getElementById("newTaskInput");
-        if (input.value.trim() === "") return; // 防止空输入
+        if (input.value.trim() === "") return;
 
-        // 创建新任务元素
-        const newTask = document.createElement("div");
-        newTask.className = "task-item";
-        newTask.textContent = input.value;
-        newTask.onclick = function () {
-          toggleDone(this);
+        // 创建任务容器
+        const taskItem = document.createElement("div");
+        taskItem.className = "task-item";
+        taskItem.onclick = (e) => {
+          // 只有当点击的不是按钮时才触发
+          if (e.target.tagName !== "BUTTON") toggleDone(taskItem);
         };
 
-        // 添加到列表顶部
-        tasksContainer.insertBefore(newTask, tasksContainer.firstChild);
+        // 创建任务文本
+        const taskText = document.createElement("div");
+        taskText.className = "task-text";
+        taskText.textContent = input.value;
 
-        input.value = ""; // 清空输入框
+        // 创建删除按钮
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.innerHTML = "×"; // ×符号
+        deleteBtn.onclick = function () {
+          taskItem.remove(); // 删除整个任务项
+        };
+
+        // 组合元素
+        taskItem.appendChild(taskText);
+        taskItem.appendChild(deleteBtn);
+        tasksContainer.insertBefore(taskItem, tasksContainer.firstChild);
+
+        input.value = "";
       }
+
+      // 初始化现有任务（修改原有静态任务）
+      document.querySelectorAll(".task-item").forEach((item) => {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.innerHTML = "×";
+        deleteBtn.onclick = () => item.remove();
+        item.innerHTML = `<div class="task-text">${item.textContent}</div>`;
+        item.appendChild(deleteBtn);
+      });
     </script>
     <div style="margin-top: 20px">
       <input type="text" id="newTaskInput" placeholder="输入新任务" />
       <button onclick="addTask()">添加任务</button>
     </div>
+
   </body>
 </html>
