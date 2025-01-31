@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- 声明文档类型为HTML5 -->
+<html lang="zh-CN">
+  <!-- 整个页面的根元素，lang指定中文 -->
+  <head>
+    <!-- 头部：包含元数据和样式 -->
+    <meta charset="UTF-8" />
+    <!-- 字符编码设置为UTF-8 -->
+    <title>我的第一个项目</title>
+    <!-- 浏览器标签页显示的标题 -->
+    <style>
+      /* CSS样式区域 */
+      body {
+        font-family: "微软雅黑", sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 20px;
+        color: blue;
+      }
+      .task-item {
+        background-color: #41575e;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      /* 新增的footer样式 */
+      footer {
+        background-color: #f0f0f0;
+        text-align: center;
+        padding: 15px;
+        /* 固定在底部 */
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        /* 可选：添加顶部边框 */
+        border-top: 1px solid #ddd;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 页面可见内容 -->
+    <h1>📋 我的超级项目列表</h1>
+    <div id="tasks">
+      <div class="task-item" onclick="toggleDone(this)">学习HTML基础</div>
+      <div class="task-item" onclick="toggleDone(this)">安装VSCode</div>
+      <div class="task-item" onclick="toggleDone(this)">创建第一个网页</div>
+    </div>
+
+    <!-- 新增的footer部分 -->
+    <footer>
+      <p>© 2025 我的项目管理应用. All rights reserved.</p>
+      <p>联系邮箱：timelody@126.com</p>
+    </footer>
+
+    <script>
+      // 在这里写JavaScript代码
+      // 获取任务列表容器
+      const tasksContainer = document.getElementById("tasks");
+
+      // 获取所有任务项（返回数组）
+      const taskItems = document.getElementsByClassName("task-item");
+
+      console.log(tasksContainer); // 在控制台查看结果
+      console.log(taskItems); // 检查是否获取到3个任务项
+
+      function toggleDone(element) {
+        // 切换完成状态样式
+        element.style.textDecoration =
+          element.style.textDecoration === "line-through"
+            ? "none"
+            : "line-through";
+        element.style.opacity = element.style.opacity === "0.5" ? "1" : "0.5";
+      }
+
+      function addTask() {
+        const input = document.getElementById("newTaskInput");
+        if (input.value.trim() === "") return; // 防止空输入
+
+        // 创建新任务元素
+        const newTask = document.createElement("div");
+        newTask.className = "task-item";
+        newTask.textContent = input.value;
+        newTask.onclick = function () {
+          toggleDone(this);
+        };
+
+        // 添加到列表顶部
+        tasksContainer.insertBefore(newTask, tasksContainer.firstChild);
+
+        input.value = ""; // 清空输入框
+      }
+    </script>
+    <div style="margin-top: 20px">
+      <input type="text" id="newTaskInput" placeholder="输入新任务" />
+      <button onclick="addTask()">添加任务</button>
+    </div>
+  </body>
+</html>
